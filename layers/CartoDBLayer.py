@@ -40,11 +40,12 @@ class CartoDBLayer(QgsVectorLayer):
     LAYER_TNAME_PROPERTY = 'tableName'
     LAYER_SQL_PROPERTY = 'cartoSQL'
 
-    def __init__(self, iface, tableName, user, apiKey, owner=None, sql=None, geoJSON=None,
+    def __init__(self, iface, tableName, user, apiKey, owner=None, sql=None, geoJSON=None, host='maps.geografia.com.au',
                  filterByExtent=False, spatiaLite=None, readonly=False, multiuser=False, isSQL=False):
         self.iface = iface
         self.user = user
         self._apiKey = apiKey
+        self._hostName = host
         self.layerType = 'ogr'
         self.owner = owner
         self.isSQL = isSQL
@@ -82,7 +83,7 @@ class CartoDBLayer(QgsVectorLayer):
         readonly = True
         if spatiaLite is None:
             if geoJSON is None:
-                cartoUrl = 'https://maps.geografia.com.au/user/{}/api/v2/sql?format=GeoJSON&q={}&api_key={}'.format(self.user, sql, self._apiKey)
+                cartoUrl = 'https://{}/user/{}/api/v2/sql?format=GeoJSON&q={}&api_key={}'.format(self._hostName, self.user, sql, self._apiKey)
                 response = urlopen(cartoUrl)
                 geoJSON = response.read()
             else:
@@ -427,7 +428,8 @@ class CartoDBLayerWorker(QObject):
     @pyqtSlot(str)
     def _loadData(self, spatiaLite):
         layer = CartoDBLayer(self.iface, self.tableName, self.dlg.currentUser, self.dlg.currentApiKey,
-                             self.owner, self.sql, spatiaLite=spatiaLite, readonly=self.readonly, multiuser=self.multiuser)
+                             self.owner, self.sql, host=self.dlg.currentHostName, 
+                             spatiaLite=spatiaLite, readonly=self.readonly, multiuser=self.multiuser)
         self.finished.emit(layer)
 
     @pyqtSlot()

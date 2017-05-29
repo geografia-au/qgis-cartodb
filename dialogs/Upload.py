@@ -129,7 +129,7 @@ class CartoDBPluginUpload(CartoDBPluginUserDialog):
             def timerComplete():
                 """On timer complete, check import process in CartoDB Servers"""
                 # pylint: disable-msg=E1101
-                cartodb_api = CartoDBApi(self.currentUser, self.currentApiKey, self.currentMultiuser)
+                cartodb_api = CartoDBApi(self.currentUser, self.currentApiKey, self.currentMultiuser, hostname=self.currentHostName)
                 cartodb_api.fetchContent.connect(statusComplete)
                 cartodb_api.checkUploadStatus(data['item_queue_id'])
 
@@ -138,7 +138,7 @@ class CartoDBPluginUpload(CartoDBPluginUserDialog):
 
 
         # pylint: disable-msg=E1101
-        cartodb_api = CartoDBApi(self.currentUser, self.currentApiKey, self.currentMultiuser)
+        cartodb_api = CartoDBApi(self.currentUser, self.currentApiKey, self.currentMultiuser, hostname=self.currentHostName)
         cartodb_api.fetchContent.connect(completeUpload)
         cartodb_api.progress.connect(self.progressUpload)
         self.ui.uploadBar.show()

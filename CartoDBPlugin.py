@@ -161,7 +161,7 @@ class CartoDBPlugin(QObject):
 
         result = dlg.exec_()
         if result == 1 and dlg.currentUser is not None and dlg.currentApiKey is not None:
-            self.toolbar.setUserCredentials(dlg.currentUser, dlg.currentApiKey, dlg.currentMultiuser)
+            self.toolbar.setUserCredentials(dlg.currentUser, dlg.currentApiKey, dlg.currentMultiuser, dlg.currentHostName)
             self._mainAction.setEnabled(True)
             self._loadDataAction.setEnabled(True)
             self._createVizAction.setEnabled(True)
@@ -242,7 +242,7 @@ class CartoDBPlugin(QObject):
             sql = dlg.getQuery()
             progressMessageBar, progress = self.addLoadingMsg(1)
             QgsMessageLog.logMessage('SQL: ' + sql, 'CartoDB Plugin', QgsMessageLog.INFO)
-            layer = CartoDBLayer(self.iface, 'SQLQuery', dlg.currentUser, dlg.currentApiKey, sql=sql, isSQL=True)
+            layer = CartoDBLayer(self.iface, 'SQLQuery', dlg.currentUser, dlg.currentApiKey, host=dlg.currentHostName, sql=sql, isSQL=True)
             QgsMapLayerRegistry.instance().addMapLayer(layer)
             self.layers.append(layer)
             progress.setValue(1)
@@ -253,7 +253,7 @@ class CartoDBPlugin(QObject):
         dlg = CartoDBPluginUpload(self.iface, self.toolbar)
         def addLayer(fileName, tableName):
             newLayer = CartoDBLayer(self.iface, tableName, dlg.currentUser, dlg.currentApiKey,
-                             dlg.currentUser, None, spatiaLite=fileName, multiuser=dlg.currentMultiuser)
+                             dlg.currentUser, None, host=dlg.currentHostName, spatiaLite=fileName, multiuser=dlg.currentMultiuser)
             QgsMapLayerRegistry.instance().addMapLayer(newLayer)
             self.layers.append(newLayer)
 

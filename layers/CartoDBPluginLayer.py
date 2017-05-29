@@ -57,8 +57,9 @@ class CartoDBPluginLayer(QgsPluginLayer):
 
         if cartoName != '':
             apiKey = self.settings.value('/CartoDBPlugin/%s/api' % cartoName)
+            hostName = self.settings.value('/CartoDBPlugin/%s/hostname' % cartoName)
             qDebug('api: ' + apiKey)
-            self.cartodbLayer = CartoDBLayer(self.iface, tableName, cartoName, apiKey)
+            self.cartodbLayer = CartoDBLayer(self.iface, tableName, cartoName, apiKey, host=hostName)
             self.createCB(self)
         return True
 

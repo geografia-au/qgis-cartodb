@@ -110,7 +110,7 @@ class CartoDBNewSQLDialog(CartoDBUserDataDialog):
     def findTables(self):
         self.ui.testBT.setEnabled(True)
 
-        cl = CartoDBAPIKey(self.currentApiKey, self.currentUser)
+        cl = CartoDBAPIKey(self.currentApiKey, self.currentUser, host=self.currentHostName)
         try:
             if not str(self.currentMultiuser) in ['true', '1', 'True']:
                 sqlTables = "SELECT CDB_UserTables() table_name"
